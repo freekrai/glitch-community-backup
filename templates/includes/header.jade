@@ -1,38 +1,22 @@
-- play = "https://cdn.hyperdev.com/6ce807b5-7214-49d7-aadd-f11803bc35fd%2Fplay.svg"
-
-- SignInPopPresenter = require "../../presenters/sign-in-pop"
-- UserOptionsPopPresenter = require "../../presenters/user-options-pop"
+- SignInPopPresenter = require "../../presenters/pop-overs/sign-in-pop"
+- UserOptionsPopPresenter = require "../../presenters/pop-overs/user-options-pop"
 
 header(role="banner")
   .header-info
-
     a(href=@baseUrl)
-      img.logo(src=@logo)
-
-    h1.headline(class=@hiddenIfUserIsSignedIn)
-      a(href=@baseUrl)
-        span= "Glitch"
-      span= " "
-      span is the friendly community where you'll build the app of your dreams
-
-    span(class=@hiddenIfUserIsSignedIn)
-      p.about With working example apps to remix, a code editor to modify them, instant hosting and deployment - anybody can build a web app on Glitch, for free. 
-        a(href="https://glitch.com/about") Learn more
-      p.video(click=@showVideoOverlay)
-        img.play-button(src=play)
-        span How it works in 2 minutes
+      img.logo(src=@logo alt="Glitch")
 
   nav(role="navigation")  
-    form(action="#{@baseUrl}search" method="get" role="search")
-      input.search-input(name="q" placeholder="bots, apps, tutorials" value=@application.searchQuery)
+    form(action="#{@baseUrl}search" method="get" role="search" @submit)
+      label.screen-reader-text(for="search-projects") Search Glitch projects
+      input.search-input(name="q" id="search-projects" placeholder="bots, apps, users" value=@application.searchQuery)
 
-    span(class=@hiddenIfUserIsSignedIn)
-      button.button-small.opens-pop-over(click=@toggleSignInPopVisible) Sign in
-      span(class=@popHiddenUnlessSignInPopVisible)
+    span(class=@hiddenIfSignedIn)
+      .button.button-small.opens-pop-over(click=@toggleSignInPopVisible) Sign in
+      span(class=@hiddenUnlessSignInPopVisible)
         = SignInPopPresenter(@.application).template
-    .user-options-pop-button.opens-pop-over(class=@hiddenUnlessUserIsSignedIn click=@toggleUserOptionsPopVisible data-tooltip="User options")
+    .user-options-pop-button.opens-pop-over(class=@hiddenUnlessSignedIn click=@toggleUserOptionsPopVisible data-tooltip="User options" data-tooltip-right=true)
       .user
-        img(src=@userAvatar width=30 height=30)
+        img(src=@userAvatar width=30 height=30 alt="User options")
         span.down-arrow.icon
       = UserOptionsPopPresenter(@.application).template
-
